@@ -22,7 +22,7 @@ public class GroupController {
         return groupService.getGroups();
     }
     @GetMapping(path = "/groups/{groupId}")
-    public String getGroup(@PathVariable long groupId){
+    public Group getGroup(@PathVariable long groupId){
         System.out.println("Calling getGroup in GroupController ===>");
         return groupService.getGroup(groupId);
     }

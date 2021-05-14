@@ -1,8 +1,17 @@
 package com.whelmed.demo.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "lists")
 public class List {
+    @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
     private String name;
+    @Column
     private String description; // description of what the list is for
 
     public List(Long id, String name, String description) {

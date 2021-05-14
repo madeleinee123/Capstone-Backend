@@ -16,7 +16,7 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping(path = "/groups/")
+    @GetMapping(path = "/groups")
     public List<Group> getGroups(){
         System.out.println("Calling getGroups in GroupController ===>");
         return groupService.getGroups();

@@ -3,7 +3,7 @@ package com.whelmed.demo.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "group")
+@Table(name = "groups")
 public class Group {
     @Id
     @Column

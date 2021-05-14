@@ -1,10 +1,13 @@
 package com.whelmed.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.whelmed.demo.model.Group;
 import com.whelmed.demo.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,8 +40,11 @@ public class GroupController {
         return groupService.updateGroup(groupId, body);
     }
     @DeleteMapping(path = "/groups/{groupId}")
-    public String deleteGroup(@PathVariable long groupId){
+    public ResponseEntity<HashMap> deleteGroup(@PathVariable long groupId){
         System.out.println("Calling deleteGroup in GroupController ===>");
-        return groupService.deleteGroup(groupId);
+        groupService.deleteGroup(groupId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "Group with id " + groupId + " was successfully deleted.");
+        return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
 }

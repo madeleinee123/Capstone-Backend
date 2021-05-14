@@ -55,7 +55,9 @@ public class GroupService {
             throw new InformationNotFoundException("A group with id " + groupId + " does not exist");
         }
     }
-    public String deleteGroup(long groupId){
-        return "Calling deleteGroup in GroupService";
+    public void deleteGroup(long groupId){
+        System.out.println("Calling deleteGroup in GroupService");
+        Group group = this.getGroup(groupId);
+        groupRepository.delete(group);
     }
 }

@@ -1,5 +1,6 @@
 package com.whelmed.demo.service;
 
+import com.whelmed.demo.exception.InformationExistException;
 import com.whelmed.demo.exception.InformationNotFoundException;
 import com.whelmed.demo.model.Group;
 import com.whelmed.demo.repository.GroupRepository;
@@ -29,8 +30,14 @@ public class GroupService {
             throw new InformationNotFoundException("Group with id " + groupId + " does not exist");
         }
     }
-    public String createGroup(String group){
-        return "Calling createGroup in GroupService ===>";
+    public Group createGroup(Group group){
+        System.out.print("Calling createGroup in GroupService ===>");
+        Group maybe = groupRepository.findByName(group.getName());
+        if(maybe == null){
+            return groupRepository.save(group);
+        }else{
+            throw new InformationExistException("Group with name " + group.getName() + " already exists");
+        }
     }
     public String updateGroup(long groupId, String body){
         return "Calling updateGroup in GroupService ===>";

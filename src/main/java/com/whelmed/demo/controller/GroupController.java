@@ -27,7 +27,7 @@ public class GroupController {
         return groupService.getGroup(groupId);
     }
     @PostMapping(path = "/groups")
-    public String createGroup(@RequestBody String group){
+    public Group createGroup(@RequestBody Group group){
         System.out.println("Calling createGroup in GroupController ===>");
         return groupService.createGroup(group);
     }

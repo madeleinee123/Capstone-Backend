@@ -39,8 +39,21 @@ public class GroupService {
             throw new InformationExistException("Group with name " + group.getName() + " already exists");
         }
     }
-    public String updateGroup(long groupId, String body){
-        return "Calling updateGroup in GroupService ===>";
+    public Group updateGroup(long groupId, Group group){
+        System.out.println("Calling updateGroup in GroupService ===>");
+        Optional<Group> exists = groupRepository.findById(groupId);
+        Group maybe = groupRepository.findByName(group.getName());
+        if (exists.isPresent()){
+            if (maybe == null || (maybe.getId() == groupId)){
+                exists.get().setName(group.getName());
+                exists.get().setDescription(group.getDescription());
+                return groupRepository.save(exists.get());
+            }else{
+                throw new InformationExistException("Group with name " + group.getName() + " already exists");
+            }
+        }else{
+            throw new InformationNotFoundException("A group with id " + groupId + " does not exist");
+        }
     }
     public String deleteGroup(long groupId){
         return "Calling deleteGroup in GroupService";

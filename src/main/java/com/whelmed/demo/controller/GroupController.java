@@ -32,7 +32,7 @@ public class GroupController {
         return groupService.createGroup(group);
     }
     @PutMapping(path = "/groups/{groupId}")
-    public String updateGroup(@PathVariable long groupId, @RequestBody String body) {
+    public Group updateGroup(@PathVariable long groupId, @RequestBody Group body) {
         System.out.println("Calling updateGroup in GroupController ===>");
         return groupService.updateGroup(groupId, body);
     }

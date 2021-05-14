@@ -3,8 +3,8 @@ package com.whelmed.demo.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "lists")
-public class List {
+@Table(name = "group")
+public class Group {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,12 +14,12 @@ public class List {
     @Column
     private String description; // description of what the list is for
 
-    public List(Long id, String name, String description) {
+    public Group(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
-    public List(){
+    public Group(){
 
     }
 

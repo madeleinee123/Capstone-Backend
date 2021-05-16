@@ -1,6 +1,10 @@
 package com.whelmed.demo.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "groups")
@@ -13,6 +17,9 @@ public class Group {
     private String name;
     @Column
     private String description; // description of what the list is for
+    @OneToMany(mappedBy = "group", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Task> taskList;
 
     public Group(Long id, String name, String description) {
         this.id = id;
@@ -54,5 +61,13 @@ public class Group {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public List<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 }

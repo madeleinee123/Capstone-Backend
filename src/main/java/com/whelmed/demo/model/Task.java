@@ -74,4 +74,15 @@ public class Task {
     public void setGroup(Group group) {
         this.group = group;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", priority=" + priority +
+                ", consequence='" + consequence + '\'' +
+                ", dueDate=" + dueDate +
+                '}';
+    }
 }

@@ -111,9 +111,15 @@ public class GroupService {
         }
 
     }
-    public void deleteTask(long groupId, long taskId){
+    public void deleteTask(Long groupId, Long taskId){
         System.out.println("Calling deleteTask in GroupService ===>");
         Task task = this.getTask(groupId, taskId);
         taskRepository.deleteById(task.getId());
+    }
+    public Task updateIsComplete(Long groupId, Long taskId){
+        System.out.println("Calling updateIsComplete in GroupService ===>");
+        Task task = this.getTask(groupId, taskId);
+        task.setComplete(!task.isComplete());
+        return taskRepository.save(task);
     }
 }

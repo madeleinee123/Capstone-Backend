@@ -16,11 +16,13 @@ public class Task {
     @Column
     private String title;
     @Column
-    private int priority;
+    private Integer priority;
     @Column
     private String consequence;
     @Column
     private String dueDate;
+    @Column
+    private Boolean isComplete;
     @ManyToOne
     @JoinColumn(name = "group_id")
     @JsonIgnore
@@ -29,11 +31,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, int priority, String consequence, String dueDate) {
+    public Task(String title, Integer priority, String consequence, String dueDate, Boolean isComplete) {
         this.title = title;
         this.priority = priority;
         this.consequence = consequence;
         this.dueDate = dueDate;
+        this.isComplete = isComplete;
     }
 
     public String getTitle() {
@@ -44,11 +47,11 @@ public class Task {
         this.title = title;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 
@@ -76,6 +79,22 @@ public class Task {
         this.group = group;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(Boolean complete) {
+        isComplete = complete;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -83,15 +102,8 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", priority=" + priority +
                 ", consequence='" + consequence + '\'' +
-                ", dueDate=" + dueDate +
+                ", dueDate='" + dueDate + '\'' +
+                ", isComplete=" + isComplete +
                 '}';
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

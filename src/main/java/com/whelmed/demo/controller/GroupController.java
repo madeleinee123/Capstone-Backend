@@ -76,4 +76,9 @@ public class GroupController {
         responseMessage.put("status", "Task with id " + taskId + " in group with id " + groupId + " was successfully deleted.");
         return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
+    @PatchMapping(path = "/groups/{groupId}/tasks/{taskId}")
+    public Task updateIsComplete(@PathVariable Long groupId, @PathVariable Long taskId){
+        System.out.println("Calling updateIsComplete in GroupController ===>");
+        return groupService.updateIsComplete(groupId, taskId);
+    }
 }

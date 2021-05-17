@@ -47,4 +47,29 @@ public class GroupController {
         responseMessage.put("status", "Group with id " + groupId + " was successfully deleted.");
         return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
+    @GetMapping(path = "/groups/{groupId}/tasks")
+    public String getTasks(@PathVariable long groupId){
+        System.out.println("Calling getTasks in GroupController ===>");
+        return groupService.getTasks(groupId);
+    }
+    @GetMapping(path = "/groups/{groupId}/tasks/{taskId}")
+    public String getTask(@PathVariable long groupId, @PathVariable long taskId){
+        System.out.println("Calling getTask in GroupController ===>");
+        return groupService.getTask(groupId, taskId);
+    }
+    @PostMapping(path = "/groups/{groupId}/tasks")
+    public String createTask(@PathVariable long groupId){
+        System.out.println("Calling createTask in GroupController ===>");
+        return groupService.createTask(groupId);
+    }
+    @PutMapping(path = "/groups/{groupId}/tasks/{taskId}")
+    public String updateTask(@PathVariable long groupId, @PathVariable long taskId){
+        System.out.println("Calling updateTask in GroupController ===>");
+        return groupService.updateTask(groupId, taskId);
+    }
+    @DeleteMapping(path = "/groups/{groupId}/tasks/{taskId}")
+    public String deleteTas(@PathVariable long groupId, @PathVariable long taskId){
+        System.out.println("Calling deleteTask in GroupController ===>");
+        return groupService.deleteTask(groupId, taskId);
+    }
 }

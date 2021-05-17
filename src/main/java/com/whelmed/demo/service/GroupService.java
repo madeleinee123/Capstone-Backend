@@ -3,6 +3,7 @@ package com.whelmed.demo.service;
 import com.whelmed.demo.exception.InformationExistException;
 import com.whelmed.demo.exception.InformationNotFoundException;
 import com.whelmed.demo.model.Group;
+import com.whelmed.demo.model.Task;
 import com.whelmed.demo.repository.GroupRepository;
 import com.whelmed.demo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,19 +67,53 @@ public class GroupService {
         Group group = this.getGroup(groupId);
         groupRepository.delete(group);
     }
-    public String getTasks(long groupId){
-        return "Calling getTasks in GroupService ===>";
+    public List<Task> getTasks(long groupId){
+        System.out.println("Calling getTasks in GroupService ===>");
+        Group group  = this.getGroup(groupId);
+        return group.getTaskList();
     }
-    public String getTask(long groupId, long taskId){
-        return "Calling getTask in GroupService ===>";
+    public Task getTask(Long groupId, Long taskId){
+        System.out.println("Calling getTask in GroupService ===>");
+        Optional<Task> task = this.getTasks(groupId).stream().filter(
+                p -> p.getId().equals(taskId)).findFirst();
+        if (task.isPresent()){
+            return task.get();
+        }else{
+            throw new InformationNotFoundException("Task with id " + taskId + " doesn't exist in group " + groupId);
+        }
     }
-    public String createTask(long groupId){
-        return "Calling createTask in GroupService ===>";
+    public Task createTask(Long groupId, Task task){
+        System.out.println("Calling createTask in GroupService ===>");
+        Group group = this.getGroup(groupId);
+        Optional<Task> maybe = this.getTasks(groupId).stream().filter(
+                p -> p.getTitle().equals(task.getTitle())).findFirst();
+        if (maybe.isEmpty()){
+            task.setGroup(group);
+            return taskRepository.save(task);
+        }else{
+            throw new InformationExistException("Task with name " + task.getTitle() + " already exists in this group.");
+        }
     }
-    public String updateTask(long groupId, long taskId){
-        return "Calling updateTask in GroupService ===>";
+    public Task updateTask(Long groupId, Long taskId, Task task){
+        System.out.println("Calling updateTask in GroupService ===>");
+        Task exists = this.getTask(groupId, taskId);
+        Optional<Task> maybe = this.getTasks(groupId).stream().filter(
+                p -> p.getTitle().equals(task.getTitle())).findFirst();
+        if(maybe.isEmpty() || maybe.get().getId().equals(task.getId())){
+            exists.setTitle(task.getTitle());
+            exists.setDueDate(task.getDueDate());
+            exists.setConsequence(task.getConsequence());
+            exists.setPriority(task.getPriority());
+            exists.setGroup(task.getGroup());
+            return taskRepository.save(exists);
+        }else{
+            throw new InformationExistException("A task with name " + task.getTitle() + " already exists in group with id " + groupId);
+        }
+
     }
-    public String deleteTask(long groupId, long taskId){
-        return "Calling deleteTask in GroupService ===>";
+    public void deleteTask(long groupId, long taskId){
+        System.out.println("Calling deleteTask in GroupService ===>");
+        Task task = this.getTask(groupId, taskId);
+        taskRepository.deleteById(task.getId());
     }
 }

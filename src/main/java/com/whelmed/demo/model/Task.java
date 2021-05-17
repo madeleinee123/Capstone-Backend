@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "tasks")
@@ -11,7 +12,7 @@ public class Task {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column
     private String title;
     @Column
@@ -19,7 +20,7 @@ public class Task {
     @Column
     private String consequence;
     @Column
-    private LocalDateTime dueDate;
+    private String dueDate;
     @ManyToOne
     @JoinColumn(name = "group_id")
     @JsonIgnore
@@ -28,7 +29,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, int priority, String consequence, LocalDateTime dueDate) {
+    public Task(String title, int priority, String consequence, String dueDate) {
         this.title = title;
         this.priority = priority;
         this.consequence = consequence;
@@ -59,11 +60,11 @@ public class Task {
         this.consequence = consequence;
     }
 
-    public LocalDateTime getDueDate() {
+    public String getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -84,5 +85,13 @@ public class Task {
                 ", consequence='" + consequence + '\'' +
                 ", dueDate=" + dueDate +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

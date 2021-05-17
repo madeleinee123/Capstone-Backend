@@ -1,5 +1,6 @@
 package com.whelmed.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -20,6 +21,10 @@ public class Group {
     @OneToMany(mappedBy = "group", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Task> taskList;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     public Group(Long id, String name, String description) {
         this.id = id;
@@ -69,5 +74,13 @@ public class Group {
 
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

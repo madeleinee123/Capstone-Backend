@@ -6,7 +6,9 @@ import com.whelmed.demo.model.Group;
 import com.whelmed.demo.model.Task;
 import com.whelmed.demo.repository.GroupRepository;
 import com.whelmed.demo.repository.TaskRepository;
+import com.whelmed.demo.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,40 +28,49 @@ public class GroupService {
     }
     public List<Group> getGroups(){
         System.out.println("Calling getGroups in GroupService ===>");
-        return groupRepository.findAll();
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        return groupRepository.findByUserId(userDetails.getUser().getId());
     }
     public Group getGroup(long groupId){
         System.out.println("Calling getGroup in GroupService ===>");
-        Optional<Group> group = groupRepository.findById(groupId);
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        Optional<Group> group = groupRepository.findByIdAndUserId(groupId, userDetails.getUser().getId());
         if(group.isPresent()){
             return group.get();
         }else{
-            throw new InformationNotFoundException("Group with id " + groupId + " does not exist");
+            throw new InformationNotFoundException("Group with id " + groupId + " does not exist for given user");
         }
     }
     public Group createGroup(Group group){
         System.out.print("Calling createGroup in GroupService ===>");
-        Group maybe = groupRepository.findByName(group.getName());
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        Group maybe = groupRepository.findByNameAndUserId(group.getName(), userDetails.getUser().getId());
         if(maybe == null){
+            group.setUser(userDetails.getUser());
             return groupRepository.save(group);
         }else{
-            throw new InformationExistException("Group with name " + group.getName() + " already exists");
+            throw new InformationExistException("Group with name " + group.getName() + " already exists for given user");
         }
     }
     public Group updateGroup(long groupId, Group group){
         System.out.println("Calling updateGroup in GroupService ===>");
-        Optional<Group> exists = groupRepository.findById(groupId);
-        Group maybe = groupRepository.findByName(group.getName());
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        Optional<Group> exists = groupRepository.findByIdAndUserId(groupId, userDetails.getUser().getId());
+        Group maybe = groupRepository.findByNameAndUserId(group.getName(), userDetails.getUser().getId());
         if (exists.isPresent()){
             if (maybe == null || (maybe.getId() == groupId)){
                 exists.get().setName(group.getName());
                 exists.get().setDescription(group.getDescription());
                 return groupRepository.save(exists.get());
             }else{
-                throw new InformationExistException("Group with name " + group.getName() + " already exists");
+                throw new InformationExistException("Group with name " + group.getName() + " already exists for given user");
             }
         }else{
-            throw new InformationNotFoundException("A group with id " + groupId + " does not exist");
+            throw new InformationNotFoundException("A group with id " + groupId + " does not exist for given user");
         }
     }
     public void deleteGroup(long groupId){
@@ -84,10 +95,13 @@ public class GroupService {
     }
     public Task createTask(Long groupId, Task task){
         System.out.println("Calling createTask in GroupService ===>");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
         Group group = this.getGroup(groupId);
         Optional<Task> maybe = this.getTasks(groupId).stream().filter(
                 p -> p.getTitle().equals(task.getTitle())).findFirst();
         if (maybe.isEmpty()){
+            task.setUser(userDetails.getUser());
             task.setGroup(group);
             return taskRepository.save(task);
         }else{
@@ -119,7 +133,8 @@ public class GroupService {
     public Task updateIsComplete(Long groupId, Long taskId){
         System.out.println("Calling updateIsComplete in GroupService ===>");
         Task task = this.getTask(groupId, taskId);
-        task.setComplete(!task.isComplete());
+        Boolean isComplete = task.isComplete();
+        task.setComplete(!isComplete);
         return taskRepository.save(task);
     }
 }

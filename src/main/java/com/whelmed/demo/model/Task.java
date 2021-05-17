@@ -3,8 +3,6 @@ package com.whelmed.demo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "tasks")

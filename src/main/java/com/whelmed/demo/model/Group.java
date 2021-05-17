@@ -17,7 +17,7 @@ public class Group {
     @Column
     private String name;
     @Column
-    private String description; // description of what the list is for
+    private String description;
     @OneToMany(mappedBy = "group", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Task> taskList;
